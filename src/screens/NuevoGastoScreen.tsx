@@ -19,6 +19,15 @@ interface GastoForm {
   descripcion: string;
 }
 
+const getToday = () => {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, "0");
+  const day = String(today.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
+};
+
 // Componente de notificación flotante
 const FloatingMessage = ({ message, type }: { message: string; type: "success" | "error" | "loading" }) => {
   const colors = {
@@ -73,6 +82,7 @@ export default function NuevoGastoScreen({ onGuardar, onCancelar, isLoading }: N
   const [showError, setShowError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [localLoading, setLocalLoading] = useState(false);
+  const today = getToday();
 
   const set = (k: keyof GastoForm, v: string) => setForm((f) => ({ ...f, [k]: v }));
 
@@ -91,6 +101,12 @@ export default function NuevoGastoScreen({ onGuardar, onCancelar, isLoading }: N
     }
     if (!form.fecha) {
       setErrorMessage("Por favor selecciona una fecha");
+      setShowError(true);
+      setTimeout(() => setShowError(false), 2000);
+      return;
+    }
+    if (form.fecha > today) {
+      setErrorMessage("La fecha no puede ser superior al día de hoy");
       setShowError(true);
       setTimeout(() => setShowError(false), 2000);
       return;
@@ -149,6 +165,7 @@ export default function NuevoGastoScreen({ onGuardar, onCancelar, isLoading }: N
         <input 
           style={inputStyle} 
           type="date" 
+          max={today}
           value={form.fecha} 
           onChange={(e) => set("fecha", e.target.value)} 
           disabled={localLoading || isLoading}
@@ -182,9 +199,11 @@ export default function NuevoGastoScreen({ onGuardar, onCancelar, isLoading }: N
       {/* Botones */}
       <button 
         style={{ 
-          ...s.btnGray, 
+          ...s.btnPrimary, 
           opacity: (localLoading || isLoading) ? 0.7 : 1, 
           cursor: (localLoading || isLoading) ? "not-allowed" : "pointer",
+          padding: "10px",
+          fontSize: 13,
           marginBottom: 12
         }} 
         onClick={handleGuardar}
@@ -194,7 +213,14 @@ export default function NuevoGastoScreen({ onGuardar, onCancelar, isLoading }: N
       </button>
       
       <button 
-        style={{ ...s.btnSecondary, background: "#fff", color: "#111", border: "1px solid #ccc" }} 
+        style={{ 
+          ...s.btnSecondary, 
+          background: "#fff", 
+          color: "#111", 
+          border: "1px solid #ccc",
+          padding: "10px",
+          fontSize: 13
+        }} 
         onClick={onCancelar}
         disabled={localLoading || isLoading}
       >

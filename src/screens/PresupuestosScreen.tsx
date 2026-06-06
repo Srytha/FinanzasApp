@@ -17,8 +17,8 @@ export default function PresupuestosScreen({ presupuestos, onNuevo, onEditar }: 
   // Mostrar empty state si no hay presupuestos
   if (presupuestos.length === 0) {
     return (
-      <div style={{ ...s.screen, paddingLeft: 24, paddingRight: 24 }}>
-        <div style={{ ...s.row, marginTop: 8, marginBottom: 16 }}>
+      <div style={{ ...s.screen, padding: "16px 24px 12px" }}>
+        <div style={{ ...s.row, marginBottom: 16 }}>
           <span style={s.pageTitle}>Presupuestos</span>
           <button 
             onClick={onNuevo}
@@ -116,8 +116,8 @@ export default function PresupuestosScreen({ presupuestos, onNuevo, onEditar }: 
   }
   
   return (
-    <div style={{ ...s.screen, paddingLeft: 24, paddingRight: 24 }}>
-      <div style={{ ...s.row, marginTop: 8, marginBottom: 16 }}>
+    <div style={{ ...s.screen, padding: "16px 24px 12px" }}>
+      <div style={{ ...s.row, marginBottom: 16 }}>
         <span style={s.pageTitle}>Presupuestos</span>
         <button 
           onClick={onNuevo}

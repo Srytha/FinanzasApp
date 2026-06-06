@@ -12,6 +12,15 @@ interface EditarGastoScreenProps {
   onEliminar: (id: number) => void;
 }
 
+const getToday = () => {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, "0");
+  const day = String(today.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
+};
+
 // Componente de notificación flotante
 const FloatingMessage = ({ message, type, onClose }: { message: string; type: "success" | "error" | "loading"; onClose: () => void }) => {
   const colors = {
@@ -66,6 +75,7 @@ export default function EditarGastoScreen({ gasto, onGuardar, onCancelar, onElim
   const [form, setForm] = useState<Gasto>({ ...gasto });
   const [notification, setNotification] = useState<{ message: string; type: "success" | "error" | "loading" } | null>(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const today = getToday();
 
   const set = (k: keyof Gasto, v: string) => setForm((f) => ({ ...f, [k]: v }));
 
@@ -84,6 +94,10 @@ export default function EditarGastoScreen({ gasto, onGuardar, onCancelar, onElim
     }
     if (!form.fecha) {
       showNotification("Por favor selecciona una fecha", "error");
+      return;
+    }
+    if (form.fecha > today) {
+      showNotification("La fecha no puede ser superior al día de hoy", "error");
       return;
     }
 
@@ -138,6 +152,7 @@ export default function EditarGastoScreen({ gasto, onGuardar, onCancelar, onElim
         <input 
           style={inputStyle} 
           type="date" 
+          max={today}
           value={form.fecha} 
           onChange={(e) => set("fecha", e.target.value)} 
         />
