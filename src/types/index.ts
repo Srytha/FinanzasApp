@@ -29,6 +29,12 @@ export interface Pago {
   notificaciones: boolean;
 }
 
+export interface Usuario {
+  nombre: string;
+  email: string;
+  password: string;
+}
+
 export type TabType = "inicio" | "gastos" | "presupuestos" | "pagos" | "informes";
 export type SubScreenType = 
   | "detalle-gasto" 
@@ -39,3 +45,4 @@ export type SubScreenType =
   | "nuevo-pago" 
   | "editar-pago" 
   | null;
+export type AuthScreenType = "login" | "register" | "forgot";

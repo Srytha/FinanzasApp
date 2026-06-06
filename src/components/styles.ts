@@ -14,6 +14,7 @@ interface Styles {
   label: CSSProperties;
   input: CSSProperties;
   select: CSSProperties;
+  filterSelect: CSSProperties;
   btnPrimary: CSSProperties;
   btnSecondary: CSSProperties;
   btnDanger: CSSProperties;
@@ -42,6 +43,7 @@ export const s: Styles = {
   label: { fontSize: 13, color: "#111", marginBottom: 6, fontWeight: 500 },
   input: { width: "100%", border: "1px solid #e0e0e0", borderRadius: 8, padding: "10px 12px", fontSize: 13, color: "#111", outline: "none", marginBottom: 14, boxSizing: "border-box" },
   select: { width: "100%", border: "1px solid #e0e0e0", borderRadius: 8, padding: "10px 12px", fontSize: 13, color: "#888", outline: "none", marginBottom: 0, background: "#fff", appearance: "none", cursor: "pointer" },
+  filterSelect: { width: "100%", border: "1px solid #e0e0e0", borderRadius: 8, padding: "10px 12px", fontSize: 13, color: "#111", outline: "none", marginBottom: 14, background: "#fff", appearance: "none", cursor: "pointer" },
   btnPrimary: { width: "100%", background: "#1a5c6e", color: "#fff", border: "none", borderRadius: 10, padding: "14px", fontSize: 15, fontWeight: 700, cursor: "pointer", marginBottom: 10 },
   btnSecondary: { width: "100%", background: "#2a8fa8", color: "#fff", border: "none", borderRadius: 10, padding: "14px", fontSize: 15, fontWeight: 600, cursor: "pointer", marginBottom: 10 },
   btnDanger: { width: "100%", background: "#fff", color: "#e05252", border: "1.5px solid #e05252", borderRadius: 10, padding: "14px", fontSize: 15, fontWeight: 600, cursor: "pointer" },
@@ -50,34 +52,8 @@ export const s: Styles = {
   detailBtn: { fontSize: 12, color: "#555", border: "1px solid #ddd", borderRadius: 6, padding: "4px 10px", cursor: "pointer", background: "#fff" },
   editBtn: { fontSize: 16, cursor: "pointer", color: "#555", background: "none", border: "none" },
   newBtn: { fontSize: 12, fontWeight: 600, border: "1px solid #333", borderRadius: 20, padding: "5px 14px", background: "#fff", cursor: "pointer", display: "flex", alignItems: "center", gap: 4 },
-  toggle: (on: boolean): CSSProperties => ({ 
-    width: 42, 
-    height: 24, 
-    borderRadius: 12, 
-    background: on ? "#1a5c6e" : "#ccc", 
-    display: "flex", 
-    alignItems: "center", 
-    padding: "0 3px", 
-    cursor: "pointer", 
-    transition: "background 0.2s", 
-    justifyContent: on ? "flex-end" : "flex-start" 
-  }),
+  toggle: (on: boolean): CSSProperties => ({ width: 42, height: 24, borderRadius: 12, background: on ? "#1a5c6e" : "#ccc", display: "flex", alignItems: "center", padding: "0 3px", cursor: "pointer", transition: "background 0.2s", justifyContent: on ? "flex-end" : "flex-start" }),
   toggleDot: { width: 18, height: 18, borderRadius: "50%", background: "#fff" },
-  alertBtn: (on: boolean): CSSProperties => ({ 
-    flex: 1, 
-    padding: "8px 0", 
-    fontSize: 12, 
-    borderRadius: 8, 
-    border: on ? "1.5px solid #1a5c6e" : "1px solid #ddd", 
-    background: on ? "#e8f4f7" : "#fff", 
-    color: on ? "#1a5c6e" : "#888", 
-    fontWeight: on ? 700 : 400, 
-    cursor: "pointer" 
-  }),
-  progressBar: (pct: number): CSSProperties => ({ 
-    height: 8, 
-    borderRadius: 4, 
-    background: pct > 100 ? "#e05252" : "#555", 
-    width: `${Math.min(pct, 100)}%` 
-  }),
+  alertBtn: (on: boolean): CSSProperties => ({ flex: 1, padding: "8px 0", fontSize: 12, borderRadius: 8, border: on ? "1.5px solid #1a5c6e" : "1px solid #ddd", background: on ? "#e8f4f7" : "#fff", color: on ? "#1a5c6e" : "#888", fontWeight: on ? 700 : 400, cursor: "pointer" }),
+  progressBar: (pct: number): CSSProperties => ({ height: 8, borderRadius: 4, background: pct > 100 ? "#e05252" : "#555", width: `${Math.min(pct, 100)}%` }),
 };

@@ -14,11 +14,146 @@ export default function PagosScreen({ pagos, onNuevo, onEditar }: PagosScreenPro
   const [filtro, setFiltro] = useState<string>("");
   const filtrados = filtro ? pagos.filter((p) => p.categoria === filtro) : pagos;
   
+  // Mostrar empty state simple si no hay pagos
+  if (pagos.length === 0) {
+    return (
+      <div style={{ ...s.screen, paddingLeft: 24, paddingRight: 24 }}>
+        <div style={{ ...s.row, marginTop: 8, marginBottom: 16 }}>
+          <span style={s.pageTitle}>Lista de pagos</span>
+          <button 
+            onClick={onNuevo}
+            style={{
+              background: "#e0e0e0",
+              border: "none",
+              borderRadius: 20,
+              padding: "6px 14px",
+              display: "flex",
+              alignItems: "center",
+              gap: 6,
+              cursor: "pointer",
+              color: "#333",
+              boxShadow: "inset 0 -2px 0 rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.05)",
+              transition: "all 0.1s ease",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "translateY(-1px)";
+              e.currentTarget.style.boxShadow = "inset 0 -2px 0 rgba(0,0,0,0.1), 0 2px 4px rgba(0,0,0,0.1)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.boxShadow = "inset 0 -2px 0 rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.05)";
+            }}
+            onMouseDown={(e) => {
+              e.currentTarget.style.transform = "translateY(1px)";
+              e.currentTarget.style.boxShadow = "inset 0 0 0 rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.05)";
+            }}
+            onMouseUp={(e) => {
+              e.currentTarget.style.transform = "translateY(-1px)";
+              e.currentTarget.style.boxShadow = "inset 0 -2px 0 rgba(0,0,0,0.1), 0 2px 4px rgba(0,0,0,0.1)";
+            }}
+          >
+            <span style={{ fontSize: 16, fontWeight: 600, color: "#333" }}>+</span>
+            <span style={{ fontSize: 12, fontWeight: 500, color: "#333" }}>Nuevo</span>
+          </button>
+        </div>
+        <p style={s.pageDesc}>Aquí podrás empezar a llevar un registro de tus pagos</p>
+        <div style={{
+          background: "#f5f5f5",
+          borderRadius: 20,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: "60px 20px",
+          textAlign: "center",
+          minHeight: 400,
+        }}>
+          {/* Texto descriptivo - mismo estilo que PresupuestosScreen */}
+          <p style={{ margin: "0 0 40px 0", fontSize: 13, color: "#555", textAlign: "center", lineHeight: 1.5 }}>
+            Cada pago nuevo que realices lo verás en esta pantalla.
+          </p>
+          
+          {/* Illustration */}
+          <div style={{ fontSize: 64, marginBottom: 16 }}>🧾</div>
+          
+          {/* CTA Text */}
+          <p style={{ fontSize: 14, color: "#888", marginBottom: 20 }}>
+            Inicia con tu primer pago
+          </p>
+          
+          {/* Plus Button */}
+          <button 
+            onClick={onNuevo}
+            style={{
+              width: 52,
+              height: 52,
+              borderRadius: 16,
+              background: "#1a1a1a",
+              border: "none",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              color: "white",
+              fontSize: 24,
+              margin: "0 auto",
+              transition: "transform 0.15s, box-shadow 0.15s",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "scale(1.08)";
+              e.currentTarget.style.boxShadow = "0 6px 20px rgba(0,0,0,0.3)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "scale(1)";
+              e.currentTarget.style.boxShadow = "none";
+            }}
+          >
+            ＋
+          </button>
+        </div>
+      </div>
+    );
+  }
+  
   return (
-    <div style={s.screen}>
-      <div style={{ ...s.row, marginBottom: 16 }}>
+    <div style={{ ...s.screen, paddingLeft: 24, paddingRight: 24 }}>
+      <div style={{ ...s.row, marginTop: 8, marginBottom: 16 }}>
         <span style={s.pageTitle}>Lista de pagos</span>
-        <button style={s.newBtn} onClick={onNuevo}>＋ Nuevo</button>
+        <button 
+          onClick={onNuevo}
+          style={{
+            background: "#e0e0e0",
+            border: "none",
+            borderRadius: 20,
+            padding: "6px 14px",
+            display: "flex",
+            alignItems: "center",
+            gap: 6,
+            cursor: "pointer",
+            color: "#333",
+            boxShadow: "inset 0 -2px 0 rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.05)",
+            transition: "all 0.1s ease",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = "translateY(-1px)";
+            e.currentTarget.style.boxShadow = "inset 0 -2px 0 rgba(0,0,0,0.1), 0 2px 4px rgba(0,0,0,0.1)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = "translateY(0)";
+            e.currentTarget.style.boxShadow = "inset 0 -2px 0 rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.05)";
+          }}
+          onMouseDown={(e) => {
+            e.currentTarget.style.transform = "translateY(1px)";
+            e.currentTarget.style.boxShadow = "inset 0 0 0 rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.05)";
+          }}
+          onMouseUp={(e) => {
+            e.currentTarget.style.transform = "translateY(-1px)";
+            e.currentTarget.style.boxShadow = "inset 0 -2px 0 rgba(0,0,0,0.1), 0 2px 4px rgba(0,0,0,0.1)";
+          }}
+        >
+          <span style={{ fontSize: 16, fontWeight: 600, color: "#333" }}>+</span>
+          <span style={{ fontSize: 12, fontWeight: 500, color: "#333" }}>Nuevo</span>
+        </button>
       </div>
       <p style={{ fontSize: 13, fontWeight: 600, marginBottom: 2 }}>Mis pagos</p>
       <p style={{ ...s.pageDesc, marginBottom: 12 }}>Estos son tus pagos definidos para la semana:</p>
@@ -27,7 +162,9 @@ export default function PagosScreen({ pagos, onNuevo, onEditar }: PagosScreenPro
         {categorias.map((c) => <option key={c} value={c}>{c}</option>)}
       </SelectWrap>
       {filtrados.length === 0 ? (
-        <div style={{ textAlign: "center", padding: "40px 0", color: "#bbb", fontSize: 13 }}>Sin pagos registrados</div>
+        <div style={{ textAlign: "center", padding: "40px 0", color: "#bbb", fontSize: 13 }}>
+          No hay pagos en esta categoría
+        </div>
       ) : (
         filtrados.map((p) => (
           <div key={p.id} style={s.gastoCard}>
