@@ -1,9 +1,13 @@
 import { s } from "../components/styles";
 
-export default function InicioScreen() {
+interface InicioScreenProps {
+  nombre: string;
+}
+
+export default function InicioScreen({ nombre }: InicioScreenProps) {
   return (
-    <div style={s.screen}>
-      <p style={{ fontSize: 22, fontWeight: 700, marginBottom: 4, color: "#111" }}>¡Hola, Nombre!</p>
+    <div style={{ ...s.screen, paddingLeft: 28, paddingRight: 28 }}>
+      <p style={{ fontSize: 22, fontWeight: 700, marginBottom: 4, color: "#111" }}>¡Hola, {nombre}!</p>
       <p style={{ fontSize: 13, color: "#888", marginBottom: 16 }}>Controlar tu dinero es el primer paso hacia tu libertad financiera.</p>
       <div style={s.card}>
         <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 8 }}>
@@ -15,7 +19,11 @@ export default function InicioScreen() {
         <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 8 }}>
           <span>⚡</span><span style={{ fontWeight: 700, fontSize: 13 }}>Tips rápidos</span>
         </div>
-        <p style={{ fontSize: 12, color: "#666", lineHeight: 1.8 }}>• Registra todo{"\n"}• Revisa tus gastos semanalmente{"\n"}• Define presupuestos</p>
+        <div style={{ fontSize: 12, color: "#666", lineHeight: 2 }}>
+          <div style={{ marginBottom: 4 }}>• Registra todo</div>
+          <div style={{ marginBottom: 4 }}>• Revisa tus gastos semanalmente</div>
+          <div>• Define presupuestos</div>
+        </div>
       </div>
       <div style={{ ...s.card, background: "#f9f9f9" }}>
         <p style={{ fontSize: 12, color: "#666", lineHeight: 1.6 }}>Utiliza el menú inferior para navegar por la app y comenzar a registrar gastos, crear presupuestos y ver tus informes financieros.</p>
