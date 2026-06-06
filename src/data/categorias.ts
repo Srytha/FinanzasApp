@@ -1,0 +1,1 @@
+export const categorias: string[] = ["Alimentación", "Transporte", "Salud", "Educación", "Entretenimiento", "Comida", "Ocio", "Otros"];
