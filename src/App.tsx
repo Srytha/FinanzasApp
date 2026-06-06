@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { s } from "./components/styles";
 import { useLocalStorage } from "./hooks/useLocalStorage";
+import { useToast } from "./hooks/useToast";
+import Toast from "./components/Toast";
 import { Gasto, Presupuesto, Pago, TabType, SubScreenType } from "./types";
 import Navbar from "./components/Navbar";
 import InicioScreen from "./screens/InicioScreen";
@@ -19,6 +21,8 @@ import InformesScreen from "./screens/InformesScreen";
 export default function App() {
   const [tab, setTab] = useState<TabType>("inicio");
   const [subScreen, setSubScreen] = useState<SubScreenType>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const { toast, showToast, hideToast } = useToast();
 
   const [gastos, setGastos] = useLocalStorage<Gasto[]>("finanzas_gastos", [
     { id: 1, nombre: "Café", categoria: "Alimentación", valor: "2.50", fecha: new Date().toISOString().split('T')[0], descripcion: "Café de la mañana" },
@@ -51,48 +55,112 @@ export default function App() {
     back(); 
   };
 
-  const guardarGasto = (form: Omit<Gasto, "id">) => {
-    if (!form.nombre) return;
+  const guardarGasto = async (form: Omit<Gasto, "id">) => {
+    if (!form.nombre) {
+      showToast("Por favor complete el nombre del gasto", "error");
+      return;
+    }
+    
+    setIsLoading(true);
+    showToast("Por favor espere...", "loading");
+    
+    // Simular un pequeño retraso para mostrar el loading
+    await new Promise(resolve => setTimeout(resolve, 500));
+    
     if (gastoActivo) {
       setGastos(gastos.map((g) => g.id === gastoActivo.id ? { ...form, id: gastoActivo.id } : g));
+      showToast("Gasto modificado con éxito", "success");
     } else {
       setGastos([...gastos, { ...form, id: Date.now() }]);
+      showToast("Gasto registrado con éxito", "success");
     }
+    
+    setIsLoading(false);
     back();
   };
 
-  const eliminarGasto = (id: number) => { 
+  const eliminarGasto = async (id: number) => { 
+    setIsLoading(true);
+    showToast("Por favor espere...", "loading");
+    
+    await new Promise(resolve => setTimeout(resolve, 500));
+    
     setGastos(gastos.filter((g) => g.id !== id)); 
+    showToast("Gasto eliminado con éxito", "success");
+    
+    setIsLoading(false);
     back(); 
   };
 
-  const guardarPresupuesto = (form: Omit<Presupuesto, "id" | "gastado">) => {
-    if (!form.nombre) return;
+  const guardarPresupuesto = async (form: Omit<Presupuesto, "id" | "gastado">) => {
+    if (!form.nombre) {
+      showToast("Por favor complete el nombre del presupuesto", "error");
+      return;
+    }
+    
+    setIsLoading(true);
+    showToast("Por favor espere...", "loading");
+    
+    await new Promise(resolve => setTimeout(resolve, 500));
+    
     if (presupuestoActivo) {
       setPresupuestos(presupuestos.map((p) => p.id === presupuestoActivo.id ? { ...form, id: presupuestoActivo.id, gastado: p.gastado } : p));
+      showToast("Presupuesto modificado con éxito", "success");
     } else {
       setPresupuestos([...presupuestos, { ...form, id: Date.now(), gastado: "0" }]);
+      showToast("Presupuesto creado con éxito", "success");
     }
+    
+    setIsLoading(false);
     back();
   };
 
-  const eliminarPresupuesto = (id: number) => { 
+  const eliminarPresupuesto = async (id: number) => { 
+    setIsLoading(true);
+    showToast("Por favor espere...", "loading");
+    
+    await new Promise(resolve => setTimeout(resolve, 500));
+    
     setPresupuestos(presupuestos.filter((p) => p.id !== id)); 
+    showToast("Presupuesto eliminado con éxito", "success");
+    
+    setIsLoading(false);
     back(); 
   };
 
-  const guardarPago = (form: Omit<Pago, "id">) => {
-    if (!form.nombre) return;
+  const guardarPago = async (form: Omit<Pago, "id">) => {
+    if (!form.nombre) {
+      showToast("Por favor complete el nombre del pago", "error");
+      return;
+    }
+    
+    setIsLoading(true);
+    showToast("Por favor espere...", "loading");
+    
+    await new Promise(resolve => setTimeout(resolve, 500));
+    
     if (pagoActivo) {
       setPagos(pagos.map((p) => p.id === pagoActivo.id ? { ...form, id: pagoActivo.id } : p));
+      showToast("Pago modificado con éxito", "success");
     } else {
       setPagos([...pagos, { ...form, id: Date.now() }]);
+      showToast("Pago registrado con éxito", "success");
     }
+    
+    setIsLoading(false);
     back();
   };
 
-  const eliminarPago = (id: number) => { 
+  const eliminarPago = async (id: number) => { 
+    setIsLoading(true);
+    showToast("Por favor espere...", "loading");
+    
+    await new Promise(resolve => setTimeout(resolve, 500));
+    
     setPagos(pagos.filter((p) => p.id !== id)); 
+    showToast("Pago eliminado con éxito", "success");
+    
+    setIsLoading(false);
     back(); 
   };
 
@@ -100,17 +168,17 @@ export default function App() {
     if (subScreen === "detalle-gasto" && gastoActivo) 
       return <DetalleGastoScreen gasto={gastoActivo} onBack={back} onEditar={(g) => { setGastoActivo(g); go("editar-gasto"); }} />;
     if (subScreen === "nuevo-gasto") 
-      return <NuevoGastoScreen onGuardar={guardarGasto} onCancelar={back} />;
+      return <NuevoGastoScreen onGuardar={guardarGasto} onCancelar={back} isLoading={isLoading} />;
     if (subScreen === "editar-gasto" && gastoActivo) 
-      return <EditarGastoScreen gasto={gastoActivo} onGuardar={(g) => guardarGasto(g)} onCancelar={back} onEliminar={eliminarGasto} />;
+      return <EditarGastoScreen gasto={gastoActivo} onGuardar={(g) => guardarGasto(g)} onCancelar={back} onEliminar={eliminarGasto} isLoading={isLoading} />;
     if (subScreen === "nuevo-presupuesto") 
-      return <CrearPresupuestoScreen onGuardar={guardarPresupuesto} onCancelar={back} />;
+      return <CrearPresupuestoScreen onGuardar={guardarPresupuesto} onCancelar={back} isLoading={isLoading} />;
     if (subScreen === "editar-presupuesto" && presupuestoActivo) 
-      return <EditarPresupuestoScreen presupuesto={presupuestoActivo} onGuardar={(p) => guardarPresupuesto(p)} onCancelar={back} onEliminar={eliminarPresupuesto} />;
+      return <EditarPresupuestoScreen presupuesto={presupuestoActivo} onGuardar={(p) => guardarPresupuesto(p)} onCancelar={back} onEliminar={eliminarPresupuesto} isLoading={isLoading} />;
     if (subScreen === "nuevo-pago") 
-      return <ProgramarPagoScreen onGuardar={guardarPago} onCancelar={back} />;
+      return <ProgramarPagoScreen onGuardar={guardarPago} onCancelar={back} isLoading={isLoading} />;
     if (subScreen === "editar-pago" && pagoActivo) 
-      return <EditarPagoScreen pago={pagoActivo} onGuardar={(p) => guardarPago(p)} onCancelar={back} onEliminar={eliminarPago} />;
+      return <EditarPagoScreen pago={pagoActivo} onGuardar={(p) => guardarPago(p)} onCancelar={back} onEliminar={eliminarPago} isLoading={isLoading} />;
 
     switch (tab) {
       case "inicio": return <InicioScreen />;
@@ -128,6 +196,7 @@ export default function App() {
         {renderScreen()}
         <Navbar active={tab} onTab={navTo} />
       </div>
+      {toast.show && <Toast message={toast.message} type={toast.type} onClose={hideToast} />}
     </div>
   );
 }

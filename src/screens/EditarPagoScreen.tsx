@@ -10,9 +10,10 @@ interface EditarPagoScreenProps {
   onGuardar: (pago: Pago) => void;
   onCancelar: () => void;
   onEliminar: (id: number) => void;
+  isLoading?: boolean;  // Agregar esta línea
 }
 
-export default function EditarPagoScreen({ pago, onGuardar, onCancelar, onEliminar }: EditarPagoScreenProps) {
+export default function EditarPagoScreen({ pago, onGuardar, onCancelar, onEliminar, isLoading }: EditarPagoScreenProps) {
   const [form, setForm] = useState<Pago>({ ...pago });
   const set = (k: keyof Pago, v: any) => setForm((f) => ({ ...f, [k]: v }));
   
@@ -20,13 +21,35 @@ export default function EditarPagoScreen({ pago, onGuardar, onCancelar, onElimin
     <div style={s.screen}>
       <BackRow label="Editar Pago" onBack={onCancelar} />
       <p style={s.label}>Monto a Pagar</p>
-      <input style={s.input} placeholder="$ 1.00" type="number" value={form.monto} onChange={(e) => set("monto", e.target.value)} />
+      <input 
+        style={s.input} 
+        placeholder="$ 1.00" 
+        type="number" 
+        value={form.monto} 
+        onChange={(e) => set("monto", e.target.value)}
+        disabled={isLoading}
+      />
       <p style={s.label}>¿Qué vas a pagar?</p>
-      <input style={s.input} value={form.nombre} onChange={(e) => set("nombre", e.target.value)} />
+      <input 
+        style={s.input} 
+        value={form.nombre} 
+        onChange={(e) => set("nombre", e.target.value)}
+        disabled={isLoading}
+      />
       <p style={s.label}>Fecha de vencimiento</p>
-      <input style={s.input} type="date" value={form.fecha} onChange={(e) => set("fecha", e.target.value)} />
+      <input 
+        style={s.input} 
+        type="date" 
+        value={form.fecha} 
+        onChange={(e) => set("fecha", e.target.value)}
+        disabled={isLoading}
+      />
       <p style={s.label}>Categoría</p>
-      <SelectWrap value={form.categoria} onChange={(e) => set("categoria", e.target.value)} placeholder="Elige una categoría o crea una nueva">
+      <SelectWrap 
+        value={form.categoria} 
+        onChange={(e) => set("categoria", e.target.value)} 
+        placeholder="Elige una categoría o crea una nueva"
+      >
         {categorias.map((c) => <option key={c} value={c}>{c}</option>)}
       </SelectWrap>
       <p style={{ fontSize: 13, fontWeight: 700, marginBottom: 8 }}>Alerta de pago</p>
@@ -36,12 +59,35 @@ export default function EditarPagoScreen({ pago, onGuardar, onCancelar, onElimin
             <p style={{ fontSize: 13, fontWeight: 600 }}>Notificaciones activas</p>
             <p style={{ fontSize: 11, color: "#888" }}>Desactiva si no deseas recibir alertas</p>
           </div>
-          <div style={s.toggle(form.notificaciones)} onClick={() => set("notificaciones", !form.notificaciones)}><div style={s.toggleDot} /></div>
+          <div 
+            style={s.toggle(form.notificaciones)} 
+            onClick={() => !isLoading && set("notificaciones", !form.notificaciones)}
+          >
+            <div style={s.toggleDot} />
+          </div>
         </div>
       </div>
-      <button style={s.btnPrimary} onClick={() => onGuardar(form)}>Guardar Cambios</button>
-      <button style={s.btnSecondary} onClick={onCancelar}>Cancelar</button>
-      <button style={s.btnDanger} onClick={() => onEliminar(pago.id)}>Eliminar pago</button>
+      <button 
+        style={{ ...s.btnPrimary, opacity: isLoading ? 0.7 : 1, cursor: isLoading ? "not-allowed" : "pointer" }} 
+        onClick={() => onGuardar(form)}
+        disabled={isLoading}
+      >
+        {isLoading ? "Guardando..." : "Guardar Cambios"}
+      </button>
+      <button 
+        style={s.btnSecondary} 
+        onClick={onCancelar}
+        disabled={isLoading}
+      >
+        Cancelar
+      </button>
+      <button 
+        style={s.btnDanger} 
+        onClick={() => onEliminar(pago.id)}
+        disabled={isLoading}
+      >
+        Eliminar pago
+      </button>
     </div>
   );
 }
