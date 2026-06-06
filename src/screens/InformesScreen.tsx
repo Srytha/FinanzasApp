@@ -12,7 +12,7 @@ export default function InformesScreen({ gastos, presupuestos }: InformesScreenP
   const total = gastos.reduce((acc, g) => acc + parseFloat(g.valor || "0"), 0);
   
   return (
-    <div style={s.screen}>
+    <div style={{ ...s.screen, padding: "16px 24px 12px" }}>
       <BackRow label="Informe de movimientos" onBack={() => {}} />
       <p style={{ fontSize: 13, color: "#888", marginBottom: 12 }}>Aquí está tu resumen semanal:</p>
       <div style={s.card}>

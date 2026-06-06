@@ -16,6 +16,8 @@ import PagosScreen from "./screens/PagosScreen";
 import ProgramarPagoScreen from "./screens/ProgramarPagoScreen";
 import EditarPagoScreen from "./screens/EditarPagoScreen";
 import InformesScreen from "./screens/InformesScreen";
+import Toast from "./components/Toast";
+import { useToast } from "./hooks/useToast";
 
 export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -31,6 +33,7 @@ export default function App() {
   const [gastoActivo, setGastoActivo] = useState<Gasto | null>(null);
   const [presupuestoActivo, setPresupuestoActivo] = useState<Presupuesto | null>(null);
   const [pagoActivo, setPagoActivo] = useState<Pago | null>(null);
+  const { toast, showToast, hideToast } = useToast();
 
   const go = (screen: SubScreenType) => setSubScreen(screen);
   const back = () => { 
@@ -51,11 +54,13 @@ export default function App() {
 
   const guardarGasto = (form: Omit<Gasto, "id">) => {
     if (!form.nombre) return;
+    const isCreacion = !gastoActivo;
     if (gastoActivo) {
       setGastos(gastos.map((g) => g.id === gastoActivo.id ? { ...form, id: gastoActivo.id } : g));
     } else {
       setGastos([...gastos, { ...form, id: Date.now() }]);
     }
+    if (isCreacion) showToast("Gasto creado con exito", "success");
     back();
   };
 
@@ -66,11 +71,13 @@ export default function App() {
 
   const guardarPresupuesto = (form: Omit<Presupuesto, "id" | "gastado">) => {
     if (!form.nombre) return;
+    const isCreacion = !presupuestoActivo;
     if (presupuestoActivo) {
       setPresupuestos(presupuestos.map((p) => p.id === presupuestoActivo.id ? { ...form, id: presupuestoActivo.id, gastado: p.gastado } : p));
     } else {
       setPresupuestos([...presupuestos, { ...form, id: Date.now(), gastado: "0" }]);
     }
+    if (isCreacion) showToast("Presupuesto creado con exito", "success");
     back();
   };
 
@@ -81,17 +88,39 @@ export default function App() {
 
   const guardarPago = (form: Omit<Pago, "id">) => {
     if (!form.nombre) return;
+    const isCreacion = !pagoActivo;
     if (pagoActivo) {
       setPagos(pagos.map((p) => p.id === pagoActivo.id ? { ...form, id: pagoActivo.id } : p));
     } else {
       setPagos([...pagos, { ...form, id: Date.now() }]);
     }
+    if (isCreacion) showToast("Pago creado con exito", "success");
     back();
   };
 
   const eliminarPago = (id: number) => { 
     setPagos(pagos.filter((p) => p.id !== id)); 
     back(); 
+  };
+
+  const hasHomeData = gastos.length > 0 || presupuestos.length > 0 || pagos.length > 0;
+
+  const abrirNuevoGasto = () => {
+    setGastoActivo(null);
+    setTab("gastos");
+    go("nuevo-gasto");
+  };
+
+  const abrirNuevoPresupuesto = () => {
+    setPresupuestoActivo(null);
+    setTab("presupuestos");
+    go("nuevo-presupuesto");
+  };
+
+  const abrirNuevoPago = () => {
+    setPagoActivo(null);
+    setTab("pagos");
+    go("nuevo-pago");
   };
 
   const renderScreen = () => {
@@ -115,7 +144,7 @@ export default function App() {
       return <EditarPagoScreen pago={pagoActivo} onGuardar={guardarPago} onCancelar={back} onEliminar={eliminarPago} isLoading={isLoading} />;
 
     switch (tab) {
-      case "inicio": return <InicioScreen nombre={userName} />;
+      case "inicio": return <InicioScreen nombre={userName} hasData={hasHomeData} onRegistrarGasto={abrirNuevoGasto} onCrearPresupuesto={abrirNuevoPresupuesto} onProgramarPago={abrirNuevoPago} />;
       case "gastos": return <GastosScreen gastos={gastos} onNuevo={() => { setGastoActivo(null); go("nuevo-gasto"); }} onEditar={(g) => { setGastoActivo(g); go("editar-gasto"); }} onDetalle={(g) => { setGastoActivo(g); go("detalle-gasto"); }} />;
       case "presupuestos": return <PresupuestosScreen presupuestos={presupuestos} onNuevo={() => { setPresupuestoActivo(null); go("nuevo-presupuesto"); }} onEditar={(p) => { setPresupuestoActivo(p); go("editar-presupuesto"); }} />;
       case "pagos": return <PagosScreen pagos={pagos} onNuevo={() => { setPagoActivo(null); go("nuevo-pago"); }} onEditar={(p) => { setPagoActivo(p); go("editar-pago"); }} />;
@@ -128,6 +157,7 @@ export default function App() {
     <div style={s.wrapper}>
       <div style={s.phone}>
         {renderScreen()}
+        {toast.show && <Toast message={toast.message} type={toast.type} onClose={hideToast} />}
         {isAuthenticated && <Navbar active={tab} onTab={navTo} />}
       </div>
     </div>

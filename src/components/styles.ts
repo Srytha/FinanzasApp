@@ -6,6 +6,7 @@ interface Styles {
   screen: CSSProperties;
   navbar: CSSProperties;
   navItem: (active: boolean) => CSSProperties;
+  navIcon: (active: boolean) => CSSProperties;
   navLabel: (active: boolean) => CSSProperties;
   card: CSSProperties;
   row: CSSProperties;
@@ -30,12 +31,26 @@ interface Styles {
 }
 
 export const s: Styles = {
-  wrapper: { display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh", background: "#e5e5e5", fontFamily: "system-ui, sans-serif" },
+  wrapper: { display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh", background: "linear-gradient(180deg, #000000 0%, #000000 100%)", fontFamily: "system-ui, sans-serif" },
   phone: { width: 360, height: 720, background: "#fff", borderRadius: 32, border: "1px solid #ddd", overflow: "hidden", display: "flex", flexDirection: "column", boxShadow: "0 8px 40px rgba(0,0,0,0.12)" },
   screen: { flex: 1, overflowY: "auto", padding: "20px 16px 12px" },
-  navbar: { height: 64, borderTop: "1px solid #e8e8e8", display: "flex", alignItems: "center", background: "#fff", flexShrink: 0 },
-  navItem: (active: boolean): CSSProperties => ({ display: "flex", flexDirection: "column", alignItems: "center", gap: 2, cursor: "pointer", flex: 1, padding: "6px 0", opacity: active ? 1 : 0.35 }),
-  navLabel: (active: boolean): CSSProperties => ({ fontSize: 10, color: active ? "#111" : "#888", fontWeight: active ? 600 : 400 }),
+  navbar: { height: 66, borderTop: "1px solid #d6dce1", display: "flex", alignItems: "stretch", background: "#fff", flexShrink: 0, padding: "0 4px" },
+  navItem: (active: boolean): CSSProperties => ({
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 3,
+    cursor: "pointer",
+    flex: 1,
+    padding: "6px 0 5px",
+    borderTop: active ? "3px solid #1a5c6e" : "3px solid transparent",
+    background: active ? "#e9f4f7" : "#ffffff",
+    borderRadius: 10,
+    transition: "background 0.2s ease, color 0.2s ease",
+  }),
+  navIcon: (active: boolean): CSSProperties => ({ fontSize: 20, lineHeight: 1, opacity: active ? 1 : 0.9 }),
+  navLabel: (active: boolean): CSSProperties => ({ fontSize: 11, color: active ? "#0f2a31" : "#374151", fontWeight: active ? 700 : 600, letterSpacing: 0.1 }),
   card: { background: "#fff", border: "1px solid #e0e0e0", borderRadius: 12, padding: "14px 16px", marginBottom: 12 },
   row: { display: "flex", alignItems: "center", justifyContent: "space-between" },
   pageTitle: { fontSize: 20, fontWeight: 700, color: "#111", marginBottom: 2 },

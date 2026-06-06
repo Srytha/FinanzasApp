@@ -17,8 +17,8 @@ export default function PagosScreen({ pagos, onNuevo, onEditar }: PagosScreenPro
   // Mostrar empty state simple si no hay pagos
   if (pagos.length === 0) {
     return (
-      <div style={{ ...s.screen, paddingLeft: 24, paddingRight: 24 }}>
-        <div style={{ ...s.row, marginTop: 8, marginBottom: 16 }}>
+      <div style={{ ...s.screen, padding: "16px 24px 12px" }}>
+        <div style={{ ...s.row, marginBottom: 16 }}>
           <span style={s.pageTitle}>Lista de pagos</span>
           <button 
             onClick={onNuevo}
@@ -68,10 +68,12 @@ export default function PagosScreen({ pagos, onNuevo, onEditar }: PagosScreenPro
           textAlign: "center",
           minHeight: 400,
         }}>
-          {/* Texto descriptivo - mismo estilo que PresupuestosScreen */}
-          <p style={{ margin: "0 0 40px 0", fontSize: 13, color: "#555", textAlign: "center", lineHeight: 1.5 }}>
-            Cada pago nuevo que realices lo verás en esta pantalla.
-          </p>
+          {/* Texto descriptivo - reserva el mismo alto visual que la pantalla de presupuestos */}
+          <div style={{ minHeight: 54, display: "flex", alignItems: "center", marginBottom: 34 }}>
+            <p style={{ margin: 0, fontSize: 13, color: "#555", textAlign: "center", lineHeight: 1.5 }}>
+              Cada pago nuevo que realices lo verás en esta pantalla.
+            </p>
+          </div>
           
           {/* Illustration */}
           <div style={{ fontSize: 64, marginBottom: 16 }}>🧾</div>
@@ -116,8 +118,8 @@ export default function PagosScreen({ pagos, onNuevo, onEditar }: PagosScreenPro
   }
   
   return (
-    <div style={{ ...s.screen, paddingLeft: 24, paddingRight: 24 }}>
-      <div style={{ ...s.row, marginTop: 8, marginBottom: 16 }}>
+    <div style={{ ...s.screen, padding: "16px 24px 12px" }}>
+      <div style={{ ...s.row, marginBottom: 16 }}>
         <span style={s.pageTitle}>Lista de pagos</span>
         <button 
           onClick={onNuevo}
